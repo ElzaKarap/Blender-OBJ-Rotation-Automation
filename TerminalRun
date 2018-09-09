@@ -1,0 +1,3 @@
+##### run blender from terminal
+cd C:\Program Files\Blender Foundation\Blender
+blender.exe
