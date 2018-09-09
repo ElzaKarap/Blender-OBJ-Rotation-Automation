@@ -1,3 +1,66 @@
 ##### run blender from terminal
 cd C:\Program Files\Blender Foundation\Blender
 blender.exe
+
+##### run the script inslide the Scripting -> New editor
+import bpy
+
+##### import obj file
+file_loc = 'D:\\_Documents\\Documents\\Elza\\Zbrush\\Propose_noProjection\\check.obj'
+imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
+obj_object = bpy.context.selected_objects[0] ####<--Fix
+print('Imported name: ', obj_object.name)
+##### /end of import obj file
+
+##################################### locate object at the center
+# source: 
+# https://blender.stackexchange.com/questions/24015/how-to-place-objects-on-the-center-of-the-ground-plane-via-python/24018#24018
+
+# get the current object
+current_obj = bpy.context.active_object 
+# bpy.data.objects['current_obj'].select = True
+
+# get the scene
+scene = bpy.context.scene
+
+# set geometry to origin
+bpy.ops.object.origin_set(type="GEOMETRY_ORIGIN")
+
+zverts = []
+
+# get all z coordinates of the vertices
+for face in current_obj.data.polygons:
+    verts_in_face = face.vertices[:]
+    for vert in verts_in_face:
+        local_point = current_obj.data.vertices[vert].co
+        world_point = current_obj.matrix_world * local_point
+        zverts.append(world_point[2])
+
+# set the minimum z coordinate as z for cursor location
+scene.cursor_location = (0, 0, min(zverts))
+
+# set the origin to the cursor
+bpy.ops.object.origin_set(type="ORIGIN_CURSOR")
+
+# set the object to (0,0,0)
+current_obj.location = (0,0,0)
+
+# reset the cursor
+scene.cursor_location = (0,0,0)
+
+#################################### / end of locate object at the center
+
+##### scale camera to object
+bpy.ops.view3d.camera_to_view_selected()
+
+##### deleting default Cube and Camera objects
+objs = bpy.data.objects
+objs.remove(objs["Cube"], True)
+objs.remove(objs["Camera"], True)
+
+
+#### scale down the object for camera view
+bpy.data.objects['Group62733'].scale = (0.8, 0.8, 0.8)
+
+
+
