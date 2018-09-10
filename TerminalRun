@@ -6,7 +6,7 @@ blender.exe
 import bpy
 
 ##### import obj file
-file_loc = 'D:\\_Documents\\Documents\\Elza\\Zbrush\\Propose_noProjection\\check.obj'
+file_loc = 'D:\\_Documents\\Documents\\Elza\\3davatar\\ZBrush\\Cleaned\\check.obj'
 imported_object = bpy.ops.import_scene.obj(filepath=file_loc)
 obj_object = bpy.context.selected_objects[0] ####<--Fix
 print('Imported name: ', obj_object.name)
